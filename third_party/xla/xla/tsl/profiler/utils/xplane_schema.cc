@@ -19,6 +19,7 @@ limitations under the License.
 #include <cstdint>
 #include <optional>
 
+#include "absl/base/attributes.h"
 #include "absl/container/flat_hash_map.h"
 #include "absl/strings/string_view.h"
 #include "xla/tsl/lib/gtl/map_util.h"
@@ -27,54 +28,67 @@ limitations under the License.
 namespace tsl {
 namespace profiler {
 
-const absl::string_view kHostThreadsPlaneName = "/host:CPU";
-const absl::string_view kGpuPlanePrefix = "/device:GPU:";
-const absl::string_view kTpuPlanePrefix = "/device:TPU:";
-const absl::string_view kVirtualDevicePlanePrefix = "/virtualdevice:";
-const absl::string_view kTpuNonCorePlaneNamePrefix = "#Chip";
-const char kTpuPlaneRegex[] = {"/device:TPU:([0-9]*)$"};
-const char kSparseCorePlaneRegex[] = {
+ABSL_CONST_INIT const absl::string_view kHostThreadsPlaneName = "/host:CPU";
+ABSL_CONST_INIT const absl::string_view kGpuPlanePrefix = "/device:GPU:";
+ABSL_CONST_INIT const absl::string_view kTpuPlanePrefix = "/device:TPU:";
+ABSL_CONST_INIT const absl::string_view kVirtualDevicePlanePrefix =
+    "/virtualdevice:";
+ABSL_CONST_INIT const absl::string_view kTpuNonCorePlaneNamePrefix = "#Chip";
+ABSL_CONST_INIT const char kTpuPlaneRegex[] = {"/device:TPU:([0-9]*)$"};
+ABSL_CONST_INIT const char kSparseCorePlaneRegex[] = {
     "/device:TPU:[0-9]+ SparseCore ([0-9]+)$"};
 const char kSparseCoreCAEPlaneRegex[] = {
     "/device:TPU:[0-9]+ SparseCore CAE ([0-9]+)$"};
 // TODO(b/195582092): change it to /device:custom once all literals are
 // migrated.
-const absl::string_view kCustomPlanePrefix = "/device:CUSTOM:";
-const absl::string_view kCustomGpuOnDeviceTracePlanePrefix =
+ABSL_CONST_INIT const absl::string_view kCustomPlanePrefix = "/device:CUSTOM:";
+ABSL_CONST_INIT const absl::string_view kCustomGpuOnDeviceTracePlanePrefix =
     "/device:CUSTOM:MOSAIC:";  // /device:CUSTOM:MOSAIC:INSTANCE_ID
 
-const absl::string_view kScopeRangeIdTreePlaneName =
+ABSL_CONST_INIT const absl::string_view kScopeRangeIdTreePlaneName =
     "/host:__ScopeRangeCallStack__";
-const absl::string_view kTpuRuntimePlaneName = "/host:TPU-runtime";
-const absl::string_view kCuptiDriverApiPlaneName = "/host:CUPTI";
-const absl::string_view kCuptiActivityNvtxPlaneName = "/host:NVTX-CUPTI";
-const absl::string_view kRoctracerApiPlaneName = "/host:ROCTRACER";
-const absl::string_view kMetadataPlaneName = "/host:metadata";
-const absl::string_view kTFStreamzPlaneName = "/host:tfstreamz";
-const absl::string_view kPythonTracerPlaneName = "/host:python-tracer";
-const absl::string_view kHostCpusPlaneName = "Host CPUs";
-const absl::string_view kSyscallsPlaneName = "Syscalls";
+ABSL_CONST_INIT const absl::string_view kTpuRuntimePlaneName =
+    "/host:TPU-runtime";
+ABSL_CONST_INIT const absl::string_view kCuptiDriverApiPlaneName =
+    "/host:CUPTI";
+ABSL_CONST_INIT const absl::string_view kCuptiActivityNvtxPlaneName =
+    "/host:NVTX-CUPTI";
+ABSL_CONST_INIT const absl::string_view kRoctracerApiPlaneName =
+    "/host:ROCTRACER";
+ABSL_CONST_INIT const absl::string_view kMetadataPlaneName = "/host:metadata";
+ABSL_CONST_INIT const absl::string_view kTFStreamzPlaneName = "/host:tfstreamz";
+ABSL_CONST_INIT const absl::string_view kPythonTracerPlaneName =
+    "/host:python-tracer";
+ABSL_CONST_INIT const absl::string_view kHostCpusPlaneName = "Host CPUs";
+ABSL_CONST_INIT const absl::string_view kSyscallsPlaneName = "Syscalls";
 
-const absl::string_view kStepLineName = "Steps";
-const absl::string_view kSparseCoreStepLineName = "Sparse Core Steps";
-const absl::string_view kSparseCoreModuleLineName = "Sparse Core Modules";
-const absl::string_view kSparseCoreOpLineName = "Sparse Core Ops";
-const absl::string_view kTensorFlowNameScopeLineName = "Framework Name Scope";
-const absl::string_view kTensorFlowOpLineName = "Framework Ops";
-const absl::string_view kXlaModuleLineName = "XLA Modules";
-const absl::string_view kXlaOpLineName = "XLA Ops";
-const absl::string_view kXlaAsyncOpLineName = "Async XLA Ops";
-const absl::string_view kKernelLaunchLineName = "Launch Stats";
-const absl::string_view kSourceLineName = "Source code";
-const absl::string_view kHostOffloadOpLineName = "Host Offload Ops";
-const absl::string_view kCounterEventsLineName = "_counters_";
-const absl::string_view kTensorCoreSyncFlagLineName = "Tensor Core Sync Flag";
-const absl::string_view kSparseCoreSyncsLineName = "Sparse Core Syncs";
+ABSL_CONST_INIT const absl::string_view kStepLineName = "Steps";
+ABSL_CONST_INIT const absl::string_view kSparseCoreStepLineName =
+    "Sparse Core Steps";
+ABSL_CONST_INIT const absl::string_view kSparseCoreModuleLineName =
+    "Sparse Core Modules";
+ABSL_CONST_INIT const absl::string_view kSparseCoreOpLineName =
+    "Sparse Core Ops";
+ABSL_CONST_INIT const absl::string_view kTensorFlowNameScopeLineName =
+    "Framework Name Scope";
+ABSL_CONST_INIT const absl::string_view kTensorFlowOpLineName = "Framework Ops";
+ABSL_CONST_INIT const absl::string_view kXlaModuleLineName = "XLA Modules";
+ABSL_CONST_INIT const absl::string_view kXlaOpLineName = "XLA Ops";
+ABSL_CONST_INIT const absl::string_view kXlaAsyncOpLineName = "Async XLA Ops";
+ABSL_CONST_INIT const absl::string_view kKernelLaunchLineName = "Launch Stats";
+ABSL_CONST_INIT const absl::string_view kSourceLineName = "Source code";
+ABSL_CONST_INIT const absl::string_view kHostOffloadOpLineName =
+    "Host Offload Ops";
+ABSL_CONST_INIT const absl::string_view kCounterEventsLineName = "_counters_";
+ABSL_CONST_INIT const absl::string_view kTensorCoreSyncFlagLineName =
+    "Tensor Core Sync Flag";
+ABSL_CONST_INIT const absl::string_view kSparseCoreSyncsLineName =
+    "Sparse Core Syncs";
 
-const absl::string_view kDeviceVendorNvidia = "Nvidia";
-const absl::string_view kDeviceVendorAMD = "AMD";
+ABSL_CONST_INIT const absl::string_view kDeviceVendorNvidia = "Nvidia";
+ABSL_CONST_INIT const absl::string_view kDeviceVendorAMD = "AMD";
 
-const absl::string_view kTaskEnvPlaneName = "Task Environment";
+ABSL_CONST_INIT const absl::string_view kTaskEnvPlaneName = "Task Environment";
 
 namespace {
 
@@ -618,48 +632,55 @@ bool IsInternalStat(std::optional<int64_t> stat_type) {
 /*static*/ std::atomic<uint64_t> XFlow::next_flow_id_(0);
 
 // String constants for XProf TraceMes.
-const absl::string_view kMegaScaleDcnReceive =
+ABSL_CONST_INIT const absl::string_view kMegaScaleDcnReceive =
     "MegaScale: Communication Transport Receive";
-const absl::string_view kMegaScaleDcnSend =
+ABSL_CONST_INIT const absl::string_view kMegaScaleDcnSend =
     "MegaScale: Communication Transport Send";
-const absl::string_view kMegaScaleDcnSendFinished = "MegaScale: Send Finished";
-const absl::string_view kMegaScaleDcnMemAllocate = "MegaScale: Memory Allocate";
-const absl::string_view kMegaScaleDcnMemCopy = "MegaScale: Memory Copy";
-const absl::string_view kMegaScaleTopologyDiscovery =
+ABSL_CONST_INIT const absl::string_view kMegaScaleDcnSendFinished =
+    "MegaScale: Send Finished";
+ABSL_CONST_INIT const absl::string_view kMegaScaleDcnMemAllocate =
+    "MegaScale: Memory Allocate";
+ABSL_CONST_INIT const absl::string_view kMegaScaleDcnMemCopy =
+    "MegaScale: Memory Copy";
+ABSL_CONST_INIT const absl::string_view kMegaScaleTopologyDiscovery =
     "MegaScale: Communication Topology Discovery.";
-const absl::string_view kMegaScaleBarrier = "MegaScale: Barrier.";
-const absl::string_view kMegaScaleHostCommand = "MegaScale: HostCommandHandle";
-const absl::string_view kMegaScaleD2HTransferStart =
+ABSL_CONST_INIT const absl::string_view kMegaScaleBarrier =
+    "MegaScale: Barrier.";
+ABSL_CONST_INIT const absl::string_view kMegaScaleHostCommand =
+    "MegaScale: HostCommandHandle";
+ABSL_CONST_INIT const absl::string_view kMegaScaleD2HTransferStart =
     "MegaScale: Device to Host Action";
-const absl::string_view kMegaScaleD2HTransferFinished =
+ABSL_CONST_INIT const absl::string_view kMegaScaleD2HTransferFinished =
     "MegaScale: Device to Host Transfer Finished";
-const absl::string_view kMegaScaleH2DTransferStart =
+ABSL_CONST_INIT const absl::string_view kMegaScaleH2DTransferStart =
     "MegaScale: Host to Device Action";
-const absl::string_view kMegaScaleH2DTransferFinished =
+ABSL_CONST_INIT const absl::string_view kMegaScaleH2DTransferFinished =
     "MegaScale: Host to Device Transfer Finished";
-const absl::string_view kMegaScaleReductionStart = "MegaScale: Reduction";
-const absl::string_view kMegaScaleReductionFinished =
+ABSL_CONST_INIT const absl::string_view kMegaScaleReductionStart =
+    "MegaScale: Reduction";
+ABSL_CONST_INIT const absl::string_view kMegaScaleReductionFinished =
     "MegaScale: Reduction Finished";
-const absl::string_view kMegaScaleCompressionStart = "MegaScale: Compression";
-const absl::string_view kMegaScaleCompressionFinished =
+ABSL_CONST_INIT const absl::string_view kMegaScaleCompressionStart =
+    "MegaScale: Compression";
+ABSL_CONST_INIT const absl::string_view kMegaScaleCompressionFinished =
     "MegaScale: Compression Finished";
-const absl::string_view kMegaScaleDecompressionStart =
+ABSL_CONST_INIT const absl::string_view kMegaScaleDecompressionStart =
     "MegaScale: Decompression";
-const absl::string_view kMegaScaleDecompressionFinished =
+ABSL_CONST_INIT const absl::string_view kMegaScaleDecompressionFinished =
     "MegaScale: Decompression Finished";
-const char kXProfMetadataKey[] = "key";
-const char kXProfMetadataFlow[] = "flow";
-const char kXProfMetadataTransfers[] = "transfers";
-const char kXProfMetadataBufferSize[] = "buffer_size";
+ABSL_CONST_INIT const char kXProfMetadataKey[] = "key";
+ABSL_CONST_INIT const char kXProfMetadataFlow[] = "flow";
+ABSL_CONST_INIT const char kXProfMetadataTransfers[] = "transfers";
+ABSL_CONST_INIT const char kXProfMetadataBufferSize[] = "buffer_size";
 
 // String constants for threadpool_listener
-const absl::string_view kThreadpoolListenerRecord =
+ABSL_CONST_INIT const absl::string_view kThreadpoolListenerRecord =
     "ThreadpoolListener::Record";
-const absl::string_view kThreadpoolListenerStartRegion =
+ABSL_CONST_INIT const absl::string_view kThreadpoolListenerStartRegion =
     "ThreadpoolListener::StartRegion";
-const absl::string_view kThreadpoolListenerStopRegion =
+ABSL_CONST_INIT const absl::string_view kThreadpoolListenerStopRegion =
     "ThreadpoolListener::StopRegion";
-const absl::string_view kThreadpoolListenerRegion =
+ABSL_CONST_INIT const absl::string_view kThreadpoolListenerRegion =
     "ThreadpoolListener::Region";
 }  // namespace profiler
 }  // namespace tsl

@@ -95,6 +95,7 @@ cc_library(
     copts = tf_profiler_copts(),
     deps = [
         "//xla/tsl/platform:macros",
+        "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/strings",
         "@tsl//tsl/platform:regexp",
     ],
@@ -124,6 +125,7 @@ cc_library(
         "//xla/tsl/platform:logging",
         "//xla/tsl/platform:macros",
         "//xla/tsl/platform:types",
+        "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/hash",
         "@com_google_absl//absl/strings",
