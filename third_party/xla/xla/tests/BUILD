@@ -7,7 +7,9 @@ load(
     "if_rocm_is_configured",
 )
 load("//xla:package_groups.bzl", "xla_test_friend_package_group")
+load("//xla:pytype.bzl", "pytype_strict_library")
 load("//xla:xla.default.bzl", "xla_cc_test", "xla_internal")
+load("//xla/tests:aot_test.bzl", "xla_aot_test")
 load("//xla/tests:build_defs.bzl", "generate_backend_suites", "xla_test")
 load("//xla/tsl:tsl.bzl", "if_google", "if_oss", "internal_visibility")
 load("//xla/tsl:tsl.default.bzl", "filegroup")
@@ -148,9 +150,11 @@ cc_library(
 
 cc_library(
     name = "pjrt_client_registry",
+    testonly = True,
     srcs = ["pjrt_client_registry.cc"],
     hdrs = ["pjrt_client_registry.h"],
     deps = [
+        ":aot_interception_pjrt_client",
         "//xla/pjrt:pjrt_client",
     ],
 )
@@ -2650,7 +2654,7 @@ xla_test(
     ],
 )
 
-xla_test(
+xla_aot_test(
     name = "collective_ops_test",
     srcs = ["collective_ops_test.cc"],
     args = ["--xla_force_host_platform_device_count=4"],
@@ -3504,6 +3508,34 @@ bzl_library(
     deps = ["//xla/tsl:package_groups_bzl"],
 )
 
+bzl_library(
+    name = "aot_test_bzl",
+    srcs = ["aot_test.bzl"],
+    parse_tests = False,
+    visibility = ["//visibility:private"],
+    deps = [
+        "//xla:xla_bzl",
+        "//xla/tests:build_defs_bzl",
+    ],
+)
+
+bzl_library(
+    name = "build_defs_bzl",
+    srcs = ["build_defs.bzl"],
+    parse_tests = False,
+    visibility = ["//visibility:private"],
+    deps = [
+        ":backend_defs_bzl",
+        ":plugin_bzl",
+        "//xla:xla_bzl",
+        "//xla/tsl:package_groups_bzl",
+        "//xla/tsl/platform:build_config_root_bzl",
+        "//xla/tsl/platform/default:build_config_bzl",
+        "//xla/tsl/platform/default:cuda_build_defs_bzl",
+        "@local_config_rocm//rocm:build_defs_bzl",
+    ],
+)
+
 xla_test(
     name = "atan2_test",
     srcs = ["atan2_test.cc"],
@@ -3635,5 +3667,15 @@ cc_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
+    ],
+)
+
+pytype_strict_library(
+    name = "generate_complex_unary_op_samples",
+    srcs = ["generate_complex_unary_op_samples.py"],
+    deps = [
+        "//third_party/py/jax/_src:test_util",
+        "//third_party/py/mpmath",
+        "//third_party/py/numpy",
     ],
 )
